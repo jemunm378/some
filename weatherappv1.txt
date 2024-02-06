@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Data</title>
+    <style>
+        body {
+            background-color: #333333;
+            color: #ffffff;
+            font-family: "Roboto", sans-serif;
+        }
+      .today {
+        margin-left: 30px;
+      }
+        .card {
+            background-color: #444444;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .temperature {
+            font-size: 48px;
+            margin-right: 20px;
+        }
+
+        .weather-info {
+            flex-grow: 1;
+            text-align: right;
+        }
+
+        .weather-info h2 {
+            font-size: 20px;
+            margin-bottom: 0;
+        }
+
+        .weather-info p {
+            font-size: 16px;
+            margin-top: 4px;
+        }
+      
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            max-width: 100%;
+            box-sizing: border-box;
+            padding: 0 20px; /* Add some padding to the container */
+             /* Include padding in the container's width */
+            margin: 0 auto; /* Center the container horizontally */
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .card2 {
+    background-color: #444444;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     /* Card width set to 100% of the container */
+    max-width: 400px; /* Set a maximum width for the card */
+    margin: 0 auto; /* Center the card horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Prevent the card from shrinking */
+}
+
+        .card2 img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .card3 {
+      background-color: #444;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card3 h2 {
+      margin-top: 0;
+    }
+
+    .card3 .text {
+      max-height: 200px;
+      overflow: hidden;
+    }
+
+    .card3 .load-more,
+    .card3 .close-text {
+      display: none;
+      margin-top: 10px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .card3.expanded .text {
+      max-height: none;
+    }
+
+    .card3.expanded .load-more {
+      display: none;
+    }
+
+    .card3.expanded .close-text {
+      display: block;
+    }
+      #longTermSection {
+        margin-bottom: 80px;
+      }
+      
+    footer {
+  background-color: black;
+  padding: 20px;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+       position: fixed;
+  bottom: 0;
+      left: 0;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 10px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5em;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+      
+      /* Media query for mobile devices */
+@media (max-width: 600px) {
+  footer {
+    text-align: center; 
+  }
+  nav ul {
+     justify-content: flex-start;
+  }
+}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+         function fetchWeatherData() {
+            var url = 'https://api.openweathermap.org/data/2.5/weather?lat=17.7468&lon=-64.7056&appid=0a773086533ca748aa5ea1819f4b5987&units=imperial';  // Replace with the actual weather API URL
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var main = data.weather[0].main;
+                    var description = data.weather[0].description;
+                    var temp = data.main.temp;
+                    var temp_max = data.main.temp_max;
+                    var humidity = data.main.humidity;
+                    var clouds = data.clouds.all;
+
+                    document.getElementById('main').textContent = main;
+                    document.getElementById('description').textContent = description;
+                    document.getElementById('temp').textContent = temp + ' F';
+                    document.getElementById('temp_max').textContent = temp_max + ' F';
+                    document.getElementById('humidity').textContent = humidity + '%';
+                    document.getElementById('clouds').textContent = clouds + '%';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        window.addEventListener('load', fetchWeatherData);
+    var url = "https://forecast.weather.gov/product.php?site=SJU&issuedby=SJU&product=AFD&format=txt&version=1&glossary=1";
+    var xmlhttp;
+
+    if ("XMLHttpRequest" in window) {
+      xmlhttp = new XMLHttpRequest();
+    } else if ("ActiveXObject" in window) {
+      xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+    }
+
+    xmlhttp.open('GET', url, true);
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        var responseText = xmlhttp.responseText;
+        var synopsisStartIndex = responseText.indexOf(".SYNOPSIS");
+        var synopsisEndIndex = responseText.indexOf("&&", synopsisStartIndex);
+        var synopsisSection = responseText.substring(synopsisStartIndex, synopsisEndIndex);
+
+        var shortTermStartIndex = responseText.indexOf("SHORT TERM");
+        var shortTermEndIndex = responseText.indexOf("&&", shortTermStartIndex);
+        var shortTermSection = responseText.substring(shortTermStartIndex, shortTermEndIndex);
+
+        var longTermStartIndex = responseText.indexOf("LONG TERM");
+        var longTermEndIndex = responseText.indexOf("&&", longTermStartIndex);
+        var longTermSection = responseText.substring(longTermStartIndex, longTermEndIndex);
+
+        var updateStartIndex = responseText.indexOf(".UPDATE");
+        var updateEndIndex = responseText.indexOf("&&", updateStartIndex);
+        var updateSection = responseText.substring(updateStartIndex, updateEndIndex);
+
+        function addTextToCard(cardId, text) {
+          var cardElement = document.getElementById(cardId);
+          var textElement = cardElement.querySelector('.text');
+          var loadMoreElement = cardElement.querySelector('.load-more');
+          var closeTextElement = cardElement.querySelector('.close-text');
+
+          textElement.innerHTML = '<p>' + text + '</p>';
+
+          if (textElement.scrollHeight > textElement.clientHeight) {
+            loadMoreElement.style.display = 'block';
+          }
+
+          loadMoreElement.addEventListener('click', function() {
+            textElement.style.maxHeight = 'none';
+            cardElement.classList.add('expanded');
+          });
+
+          closeTextElement.addEventListener('click', function() {
+            textElement.style.maxHeight = '200px';
+            cardElement.classList.remove('expanded');
+          });
+        }
+
+        addTextToCard('synopsisSection', synopsisSection);
+        addTextToCard('shortTermSection', shortTermSection);
+        addTextToCard('longTermSection', longTermSection);
+        addTextToCard('updateSection', updateSection);
+      }
+    };
+
+    xmlhttp.send();
+    </script>
+</head>
+<body>
+    <h1 class='today'>Today</h1>
+    <div class="card">
+        <div class="temperature">
+            <span id="temp"></span>
+        </div>
+        <div class="weather-info">
+            <div>
+                <h2>Main:</h2>
+                <p><span id="main"></span></p>
+            </div>
+            <div>
+                <h2>Description:</h2>
+                <p><span id="description"></span></p>
+            </div>
+            <div>
+                <h2>Maximum Temperature:</h2>
+                <p><span id="temp_max"></span></p>
+            </div>
+            <div>
+                <h2>Humidity:</h2>
+                <p><span id="humidity"></span></p>
+            </div>
+            <div>
+                <h2>Clouds:</h2>
+                <p><span id="clouds"></span></p>
+            </div>
+        </div>
+    </div>
+  
+   <div class="container">
+        <h1 class="title">Quick Radar</h1>
+        <div class="card2">
+            <img src="https://radar.weather.gov/ridge/standard/TJUA_loop.gif" alt="Weather Radar">
+        </div>
+    </div>
+ <div class="card3" id="synopsisSection">
+    <h2>SYNOPSIS:</h2>
+    <div class="text"></div>
+    <div class="load-more">Load More</div>
+    <div class="close-text">Close</div>
+  </div>
+  <div class="card3" id="shortTermSection">
+    <h2>SHORT TERM:</h2>
+    <div class="text"></div>
+    <div class="load-more">Load More</div>
+    <div class="close-text">Close</div>
+  </div>
+  <div class="card3" id="longTermSection">
+    <h2>LONG TERM:</h2>
+    <div class="text"></div>
+    <div class="load-more">Load More</div>
+    <div class="close-text">Close</div>
+  </div>
+  
+ 
+  <footer>
+  <nav>
+    <ul>
+      <li><a href="#home">Today</a></li>
+      <li><a href="#about">Daily</a></li>
+      <li><a href="#services">Hourly</a></li>
+      <li><a href="#contact">Radar</a></li>
+      
+      
+    </ul>
+  </nav>
+</footer>
+</body>
+</html>
